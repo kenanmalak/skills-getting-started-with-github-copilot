@@ -56,9 +56,32 @@ def get_activities():
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
     # Validate activity exists
+    # Validate student is not already signed up
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
+     # Add new sports related activities
+    activities = {
+        "Chess Club": {
+            "description": "Learn strategies and compete in chess tournaments",
+            "schedule": "Fridays, 3:30 PM - 5:00 PM",
+            "max_participants": 12,
+            "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
+        },
+        "Programming Class": {
+            "description": "Learn programming fundamentals and build software projects",
+            "schedule": "Tuesdays and Thursdays, 3:30 PM - 4:30 PM",
+            "max_participants": 20,
+            "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
+        }
+    }
 
+    if email in activities[activity_name]["participants"]:
+        raise HTTPException(status_code=400, detail="Student already signed up")
+    if len(activities[activity_name]["participants"]) >= activities[activity_name]["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
+    if activity_name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+       
     # Get the specificy activity
     activity = activities[activity_name]
 
